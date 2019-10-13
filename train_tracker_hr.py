@@ -29,18 +29,27 @@ for i in range (sheet.nrows):
     submit_button.click()
     
     soup = BeautifulSoup(browser.page_source, 'lxml')
-    status = soup.find_all('td')[3]
-    location = soup.find_all('td')[4]
-    time = soup.find_all('td')[2]
+    title = soup.find_all('title')[0]
     
-    worksheet.write(row, col, str(sheet.cell_value(i, 0)))
-    worksheet.write(row, col + 1, status.text)
-    worksheet.write(row, col + 2, location.text)
-    worksheet.write(row, col + 3, time.text)
+    if title.text == "Trenutno stanje vagona":
+        status = soup.find_all('td')[3]
+        location = soup.find_all('td')[4]
+        time = soup.find_all('td')[2]
     
-    back_button = browser.find_element_by_xpath("//input[@type='SUBMIT']")
-    back_button.click()
+        worksheet.write(row, col, str(sheet.cell_value(i, 0)))
+        worksheet.write(row, col + 1, status.text)
+        worksheet.write(row, col + 2, location.text)
+        worksheet.write(row, col + 3, time.text)
     
+        back_button = browser.find_element_by_xpath("//input[@type='SUBMIT']")
+        back_button.click()
+    else:
+        status2 = soup.find_all('p')[2]
+        worksheet.write(row, col, str(sheet.cell_value(i, 0)))
+        worksheet.write(row, col + 1, status2.text)
+        submit_button2 = browser.find_element_by_xpath("//input[@type='SUBMIT']")
+        submit_button2.click()
+        
     row += 1
     
 workbook.close()
