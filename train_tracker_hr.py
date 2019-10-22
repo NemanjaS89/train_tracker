@@ -35,11 +35,15 @@ for i in range (sheet.nrows):
         status = soup.find_all('td')[3]
         location = soup.find_all('td')[4]
         time = soup.find_all('td')[2]
-    
+            
         worksheet.write(row, col, str(sheet.cell_value(i, 0)))
         worksheet.write(row, col + 1, status.text)
         worksheet.write(row, col + 2, location.text)
         worksheet.write(row, col + 3, time.text)
+        
+        if len(soup.find_all('td')) > 5:
+            status_2 = soup.find_all('td')[5]
+            worksheet.write(row, col + 2, status_2.text)
     
         back_button = browser.find_element_by_xpath("//input[@type='SUBMIT']")
         back_button.click()
